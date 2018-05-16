@@ -85,7 +85,7 @@ class Transaction
     {
         $this->valueOut = $valueOut;
     }
-    
+
     public function getFee(): int
     {
         return $this->fee;
