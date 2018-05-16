@@ -10,15 +10,16 @@ class TransactionMapper
 {
     public function fromResponse($data): ?Transaction
     {
-        $transaction = new Transaction;
+        $transaction = new Transaction();
 
         $transaction->setId($data->txid);
         $transaction->setBlockHeight($data->blockheight);
         $transaction->setConfirmations($data->confirmations);
 
         // since unconfirmed transactions have not been placed in a block yet...
-        if ($transaction->getConfirmations() !== 0)
+        if ($transaction->getConfirmations() !== 0) {
             $transaction->setBlockHash($data->blockhash);
+        }
 
         $transaction->setSize($data->size);
 
@@ -52,9 +53,10 @@ class TransactionMapper
     protected function mapInputs($inputs): array
     {
         return array_map(function ($item) {
-            $input = new Input;
+            $input = new Input();
             $input->setTransaction($item->txid);
             $input->setValue($item->valueSat);
+
             return $input;
         }, $inputs);
     }
@@ -64,10 +66,11 @@ class TransactionMapper
         return array_map(function ($item) {
             $type = $item->scriptPubKey->type;
 
-            $output = new Output;
+            $output = new Output();
             $output->setType($type);
             $output->setValue(to_satoshi($item->value));
+
             return $output;
-        },$outputs);
+        }, $outputs);
     }
 }

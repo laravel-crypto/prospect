@@ -2,11 +2,11 @@
 
 namespace Prospect\Backends;
 
-use Prospect\Address;
 use GuzzleHttp\Client;
-use Prospect\Transaction;
+use Prospect\Address;
 use Prospect\Backends\Insight\AddressMapper;
 use Prospect\Backends\Insight\TransactionMapper;
+use Prospect\Transaction;
 
 class Insight implements Backend
 {
@@ -17,7 +17,7 @@ class Insight implements Backend
     {
         $this->url = $url;
         $this->client = new Client([
-            'base_uri' => $url
+            'base_uri' => $url,
         ]);
     }
 
@@ -26,7 +26,7 @@ class Insight implements Backend
         $resp = $this->client->get('tx/'.$id);
 
         // please fix me
-        return (new TransactionMapper)->fromResponse(
+        return (new TransactionMapper())->fromResponse(
             json_decode($resp->getBody())
         );
     }
@@ -36,7 +36,7 @@ class Insight implements Backend
         $resp = $this->client->get('addr/'.$address);
 
         // please fix me
-        return (new AddressMapper)->fromResponse(
+        return (new AddressMapper())->fromResponse(
             json_decode($resp->getBody())
         );
     }
@@ -51,5 +51,4 @@ class Insight implements Backend
 
         return $data;
     }
-
 }
